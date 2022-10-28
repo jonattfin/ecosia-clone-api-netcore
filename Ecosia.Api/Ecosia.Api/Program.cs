@@ -1,3 +1,8 @@
+using Ecosia.Api.Models;
+using Ecosia.Api.Models.Domain;
+using Ecosia.Api.Repositories;
+using Ecosia.Api.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddSingleton<IRepository<Project>, MemoryProjectRepository>();
 
 var app = builder.Build();
 
