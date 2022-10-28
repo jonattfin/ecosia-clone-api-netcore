@@ -1,7 +1,9 @@
+using System.Reflection;
 using Ecosia.Api.Models;
 using Ecosia.Api.Models.Domain;
 using Ecosia.Api.Repositories;
 using Ecosia.Api.Services;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddSingleton<IRepository<Project>, MemoryProjectRepository>();
 
