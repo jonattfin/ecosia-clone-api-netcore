@@ -1,7 +1,4 @@
-using Ecosia.Api.Models;
-using Ecosia.Api.Models.Domain;
 using Ecosia.Api.Models.Requests;
-using Ecosia.Api.Models.Responses;
 using Ecosia.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,77 +16,56 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(int pageSize = 10, int pageIndex = 0)
     {
-        var projects = (await _projectService.Get()).Select(MapToResponse);
+        var request = new GetProjectsRequest(pageSize, pageIndex);
+        var projects = await _projectService.GetAsync(request);
         return Ok(projects);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var project = await _projectService.GetById(id);
+        var request = new GetProjectRequest(id);
+        var project = await _projectService.GetByIdAsync(request);
         if (project is null)
         {
             return NotFound();
         }
 
-        return Ok(MapToResponse(project));
+        return Ok(project);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(ProjectRequest request)
+    public async Task<IActionResult> Post(AddProjectRequest request)
     {
-        var project = MapFromRequest(request);
-
-        await _projectService.Add(project);
+        var project = await _projectService.AddAsync(request);
         return CreatedAtAction(nameof(GetById), new { id = project.Id }, null);
     }
 
-
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, ProjectRequest request)
+    public async Task<IActionResult> Put(Guid id, UpdateProjectRequest request)
     {
-        var project = await _projectService.GetById(id);
-        if (project is null)
+        var found = await _projectService.ExistsAsync(id);
+        if (!found)
         {
             return NotFound();
         }
 
-        project.Name = request.Name;
-
-        await _projectService.Update(id, project);
+        await _projectService.UpdateAsync(id, request);
         return Ok();
     }
 
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var project = await _projectService.GetById(id);
-        if (project is null)
+        var found = await _projectService.ExistsAsync(id);
+        if (!found)
         {
             return NotFound();
         }
-        
-        await _projectService.Delete(id);
+
+        await _projectService.DeleteAsync(id);
         return Ok();
-    }
-
-    private static Project MapFromRequest(ProjectRequest request)
-    {
-        return new Project()
-        {
-            Id = Guid.NewGuid(),
-            Name = request.Name
-        };
-    }
-
-    private static ProjectResponse MapToResponse(Project project)
-    {
-        return new ProjectResponse()
-        {
-            Id = project.Id,
-            Name = project.Name
-        };
     }
 }

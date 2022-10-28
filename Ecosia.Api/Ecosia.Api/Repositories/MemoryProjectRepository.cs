@@ -21,13 +21,13 @@ public class MemoryProjectRepository : IRepository<Project>
         }).ToList();
     }
 
-    public async Task<IEnumerable<Project>> Get() => await Task.FromResult(_projects);
+    public async Task<IEnumerable<Project>> GetAsync() => await Task.FromResult(_projects);
 
-    public async Task<Project?> GetById(Guid id) => await Task.FromResult(_projects.FirstOrDefault(p => p.Id == id));
+    public async Task<Project?> GetByIdAsync(Guid id) => await Task.FromResult(_projects.FirstOrDefault(p => p.Id == id));
 
-    public async Task<bool> Delete(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        var project = await GetById(id);
+        var project = await GetByIdAsync(id);
         if (project is null)
         {
             return await Task.FromResult(false);
@@ -36,17 +36,23 @@ public class MemoryProjectRepository : IRepository<Project>
         return await Task.FromResult(_projects.Remove(project));
     }
 
-    public async Task Update(Guid id, Project project)
+    public async Task UpdateAsync(Guid id, Project project)
     {
-        var existingProject = await GetById(id);
+        var existingProject = await GetByIdAsync(id);
         if (existingProject is not null)
         {
             existingProject.Name = project.Name;
         }
     }
 
-    public async Task Add(Project project)
+    public async Task AddAsync(Project project)
     {
         _projects.Add(project);
+    }
+
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        var project = _projects.FirstOrDefault(p => p.Id == id);
+        return await Task.FromResult(project != null);
     }
 }
