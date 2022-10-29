@@ -1,33 +1,23 @@
+using Ecosia.Api.Models.Domain;
 using Ecosia.Api.Models.Requests;
-using Ecosia.Api.Models.Responses;
-using Ecosia.Api.Services;
+using Ecosia.Api.Repositories;
 using MediatR;
 
 namespace Ecosia.Api.Handlers;
 
-public class GetProjectHandler : IRequestHandler<GetProjectCommand, GetProjectResponse>
+public class GetProjectHandler : IRequestHandler<GetProjectQuery, Project>
 {
-    private readonly IProjectService _projectService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetProjectHandler(IProjectService projectService)
+    public GetProjectHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+
+    public async Task<Project> Handle(GetProjectQuery query, CancellationToken cancellationToken)
     {
-        _projectService = projectService;
-    }
-    
-    public async Task<GetProjectResponse> Handle(GetProjectCommand command, CancellationToken cancellationToken)
-    {
-        var response = await _projectService.GetByIdAsync(command.Request);
-        return new GetProjectResponse() { Project = response };
+        return await _unitOfWork.ProjectRepository.GetByIdAsync(query.Request.Id);
     }
 }
 
-
-public class GetProjectCommand : IRequest<GetProjectResponse>
+public class GetProjectQuery : IRequest<Project>
 {
-    public GetProjectRequest Request { get; set; }
-}
-
-public class GetProjectResponse
-{
-    public ProjectResponse Project { get; set; }
+    public GetProjectRequest Request { get; init; }
 }

@@ -1,32 +1,26 @@
-using Ecosia.Api.Models.Responses;
-using Ecosia.Api.Services;
+using Ecosia.Api.Repositories;
 using MediatR;
 
 namespace Ecosia.Api.Handlers;
 
-public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, DeleteProjectResponse>
+public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, bool>
 {
-    private readonly IProjectService _projectService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteProjectHandler(IProjectService projectService)
-    {
-        _projectService = projectService;
-    }
+    public DeleteProjectHandler(IUnitOfWork unitOfWork) => unitOfWork = unitOfWork;
     
-    public async Task<DeleteProjectResponse> Handle(DeleteProjectCommand command, CancellationToken cancellationToken)
+    
+    public async Task<bool> Handle(DeleteProjectCommand command, CancellationToken cancellationToken)
     {
-        var response = await _projectService.DeleteAsync(command.Id);
-        return new DeleteProjectResponse() { Result = response };
+        var result = await _unitOfWork.ProjectRepository.DeleteAsync(command.Id);
+        await _unitOfWork.SaveChangesAsync();
+        
+        return result;
     }
 }
 
 
-public class DeleteProjectCommand : IRequest<DeleteProjectResponse>
+public class DeleteProjectCommand : IRequest<bool>
 {
     public Guid Id { get; set; }
-}
-
-public class DeleteProjectResponse
-{
-    public bool Result { get; set; }
 }

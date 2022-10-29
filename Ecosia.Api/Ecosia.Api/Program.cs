@@ -1,9 +1,9 @@
 using System.Reflection;
-using Ecosia.Api.Models;
+using Ecosia.Api.Contexts;
 using Ecosia.Api.Models.Domain;
 using Ecosia.Api.Repositories;
-using Ecosia.Api.Services;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +14,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Added dependencies - START
+
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddSingleton<IRepository<Project>, MemoryProjectRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddDbContext<EcosiaDbContext>(options => options.UseInMemoryDatabase(databaseName: "EcosiaDbLocal"));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IRepository<Project>, ProjectRepository>();
+
+// Added dependencies - END
 
 var app = builder.Build();
 
