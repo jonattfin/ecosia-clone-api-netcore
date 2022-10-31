@@ -3,16 +3,15 @@ using MediatR;
 
 namespace Ecosia.Api.Handlers;
 
-public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, bool>
+public class DeleteProjectHandler : BaseHandler<DeleteProjectCommand, bool>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public DeleteProjectHandler(IUnitOfWork unitOfWork) => unitOfWork = unitOfWork;
-    
-    
-    public async Task<bool> Handle(DeleteProjectCommand command, CancellationToken cancellationToken)
+    public DeleteProjectHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
-        var result = await _unitOfWork.ProjectRepository.DeleteAsync(command.Id);
+    }
+    
+    public override async Task<bool> Handle(DeleteProjectCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _unitOfWork.ProjectRepository.DeleteAsync(command.ProjectId);
         await _unitOfWork.SaveChangesAsync();
         
         return result;
@@ -22,5 +21,5 @@ public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, bool>
 
 public class DeleteProjectCommand : IRequest<bool>
 {
-    public Guid Id { get; set; }
+    public Guid ProjectId { get; set; }
 }

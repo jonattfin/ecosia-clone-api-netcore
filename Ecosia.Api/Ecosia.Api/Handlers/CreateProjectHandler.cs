@@ -4,18 +4,18 @@ using MediatR;
 
 namespace Ecosia.Api.Handlers;
 
-public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, Project>
+public class CreateProjectHandler : BaseHandler<CreateProjectCommand, Project>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    public CreateProjectHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
+    {
+    }
 
-    public CreateProjectHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-
-    public async Task<Project> Handle(CreateProjectCommand command, CancellationToken cancellationToken)
+    public override async Task<Project> Handle(CreateProjectCommand command, CancellationToken cancellationToken)
     {
         var project = await _unitOfWork.ProjectRepository.AddAsync(command.Project);
         await _unitOfWork.SaveChangesAsync();
-        
-        return project ;
+
+        return project;
     }
 }
 

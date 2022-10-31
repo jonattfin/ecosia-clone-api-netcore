@@ -22,10 +22,17 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get( int pageIndex = 0, int pageSize = 10)
+    public async Task<IActionResult> Get(int pageIndex = 0, int pageSize = 5)
     {
-        var projects = await _mediator.Send(new GetProjectsQuery(pageIndex, pageSize));
-        return Ok(_mapper.Map<IEnumerable<ProjectResponse>>(projects));
+        var (projects, numberOfPages) = await _mediator.Send(new GetProjectsQuery(pageIndex, pageSize));
+
+        var response = new ProjectsResponse()
+        {
+            Projects = projects.Select(p => _mapper.Map<ProjectResponse>(p)),
+            NumberOfPages = numberOfPages
+        };
+
+        return Ok(response);
     }
 
     [HttpGet("{id:guid}")]
@@ -71,7 +78,7 @@ public class ProjectsController : ControllerBase
             return NotFound();
         }
 
-        await _mediator.Send(new DeleteProjectCommand() { Id = id });
+        await _mediator.Send(new DeleteProjectCommand() { ProjectId = id });
         return Ok();
     }
 }

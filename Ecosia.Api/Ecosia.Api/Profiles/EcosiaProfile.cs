@@ -10,6 +10,7 @@ public class EcosiaProfile : Profile
     public EcosiaProfile()
     {
         CreateMap<AddProjectRequest, Project>();
+        CreateMap<UpdateProjectRequest, Project>();
         CreateMap<Project, ProjectResponse>();
     }
 }

@@ -16,7 +16,7 @@ public class ProjectRepository : IRepository<Project>
         _context.Database.EnsureCreated();
     }
 
-    public async Task<IEnumerable<Project>> GetAsync(int pageIndex = 0, int pageSize = 10)
+    public async Task<(IEnumerable<Project>, int)> GetAsync(int pageIndex, int pageSize)
     {
         var projects = await _context.Projects.AsNoTracking()
             .OrderBy(p => p.Name)
@@ -24,7 +24,9 @@ public class ProjectRepository : IRepository<Project>
             .Take(pageSize)
             .ToListAsync();
 
-        return projects;
+        var numberOfPages = await _context.Projects.AsNoTracking().CountAsync() / pageSize;
+
+        return (projects, numberOfPages);
     }
 
 
@@ -41,7 +43,6 @@ public class ProjectRepository : IRepository<Project>
 
         return await Task.FromResult(_context.Projects.Remove(project) != null);
     }
-
 
     public async Task<Project> UpdateAsync(Project project)
     {

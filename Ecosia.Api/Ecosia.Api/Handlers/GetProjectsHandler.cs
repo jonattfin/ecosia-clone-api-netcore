@@ -5,19 +5,19 @@ using MediatR;
 
 namespace Ecosia.Api.Handlers;
 
-public class GetProjectsHandler : IRequestHandler<GetProjectsQuery, IEnumerable<Project>>
+public class GetProjectsHandler : BaseHandler<GetProjectsQuery, (IEnumerable<Project>, int)>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public GetProjectsHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-
-    public async Task<IEnumerable<Project>> Handle(GetProjectsQuery query, CancellationToken cancellationToken)
+    public GetProjectsHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
-        return await _unitOfWork.ProjectRepository.GetAsync(query.PageIndex, query.PageSize);
+    }
+
+    public override async Task<(IEnumerable<Project>, int)> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
+    {
+        return await _unitOfWork.ProjectRepository.GetAsync(request.PageIndex, request.PageSize);
     }
 }
 
-public class GetProjectsQuery : IRequest<IEnumerable<Project>>
+public class GetProjectsQuery : IRequest<(IEnumerable<Project>, int)>
 {
     public int PageIndex { get; }
     
