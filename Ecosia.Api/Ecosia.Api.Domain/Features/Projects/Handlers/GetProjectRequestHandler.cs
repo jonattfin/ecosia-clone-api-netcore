@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Ecosia.Api.Domain.Features.Projects.Handlers;
 
-public class GetProjectHandler : BaseHandler<GetProjectQuery, Project>
+public class GetProjectRequestHandler : BaseRequestHandler<GetProjectQuery, Project>
 {
-    public GetProjectHandler(IUnitOfWork unitOfWork): base(unitOfWork)
+    public GetProjectRequestHandler(IUnitOfWork unitOfWork): base(unitOfWork)
     {
     }
 
@@ -16,7 +16,4 @@ public class GetProjectHandler : BaseHandler<GetProjectQuery, Project>
     }
 }
 
-public class GetProjectQuery : IRequest<Project>
-{
-    public Guid ProjectId { get; init; }
-}
+public record GetProjectQuery(Guid ProjectId) : IRequest<Project>;

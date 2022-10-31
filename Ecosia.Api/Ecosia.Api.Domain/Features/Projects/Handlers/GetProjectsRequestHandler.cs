@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Ecosia.Api.Domain.Features.Projects.Handlers;
 
-public class GetProjectsHandler : BaseHandler<GetProjectsQuery, (IEnumerable<Project>, int)>
+public class GetProjectsRequestHandler : BaseRequestHandler<GetProjectsQuery, (IEnumerable<Project>, int)>
 {
-    public GetProjectsHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
+    public GetProjectsRequestHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
     }
 
@@ -16,9 +16,4 @@ public class GetProjectsHandler : BaseHandler<GetProjectsQuery, (IEnumerable<Pro
     }
 }
 
-public class GetProjectsQuery : IRequest<(IEnumerable<Project>, int)>
-{
-    public int PageIndex { get; init; }
-    
-    public int PageSize { get; init; }
-}
+public record GetProjectsQuery(int PageIndex, int PageSize) : IRequest<(IEnumerable<Project>, int)>;

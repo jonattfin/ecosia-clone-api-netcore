@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Ecosia.Api.Domain.Features.Projects.Handlers;
 
-public class DeleteProjectHandler : BaseHandler<DeleteProjectCommand, bool>
+public class DeleteProjectRequestHandler : BaseRequestHandler<DeleteProjectCommand, bool>
 {
-    public DeleteProjectHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
+    public DeleteProjectRequestHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
     }
     
@@ -19,7 +19,4 @@ public class DeleteProjectHandler : BaseHandler<DeleteProjectCommand, bool>
 }
 
 
-public class DeleteProjectCommand : IRequest<bool>
-{
-    public Guid ProjectId { get; init; }
-}
+public record DeleteProjectCommand(Guid ProjectId) : IRequest<bool>;

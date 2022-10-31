@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Ecosia.Api.Domain.Features.Projects.Handlers;
 
-public abstract class BaseHandler<TReq, TResp> : IRequestHandler<TReq, TResp> where TReq : IRequest<TResp>
+public abstract class BaseRequestHandler<TReq, TResp> : IRequestHandler<TReq, TResp> where TReq : IRequest<TResp>
 {
     protected readonly IUnitOfWork UnitOfWork;
 
-    protected BaseHandler(IUnitOfWork unitOfWork)
+    protected BaseRequestHandler(IUnitOfWork unitOfWork)
     {
         UnitOfWork = unitOfWork;
     }
