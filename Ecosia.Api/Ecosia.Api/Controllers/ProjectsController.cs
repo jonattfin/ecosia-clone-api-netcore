@@ -24,7 +24,12 @@ public class ProjectsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get(int pageIndex = 0, int pageSize = 5)
     {
-        var (projects, numberOfPages) = await _mediator.Send(new GetProjectsQuery(pageIndex, pageSize));
+        var (projects, numberOfPages) =
+            await _mediator.Send(new GetProjectsQuery
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            });
 
         var response = new ProjectsResponse()
         {
@@ -40,7 +45,7 @@ public class ProjectsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var project = await _mediator.Send(new GetProjectQuery(id));
+        var project = await _mediator.Send(new GetProjectQuery { ProjectId = id });
         if (project is null)
         {
             return NotFound();
@@ -74,7 +79,7 @@ public class ProjectsController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var project = await _mediator.Send(new GetProjectQuery(id));
+        var project = await _mediator.Send(new GetProjectQuery {ProjectId = id});
         if (project is null)
         {
             return NotFound();

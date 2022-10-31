@@ -12,19 +12,13 @@ public class GetProjectsHandler : BaseHandler<GetProjectsQuery, (IEnumerable<Pro
 
     public override async Task<(IEnumerable<Project>, int)> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
     {
-        return await _unitOfWork.ProjectRepository.GetAsync(request.PageIndex, request.PageSize);
+        return await UnitOfWork.ProjectRepository.GetAsync(request.PageIndex, request.PageSize);
     }
 }
 
 public class GetProjectsQuery : IRequest<(IEnumerable<Project>, int)>
 {
-    public int PageIndex { get; }
+    public int PageIndex { get; init; }
     
-    public int PageSize { get; }
-
-    public GetProjectsQuery( int pageIndex, int pageSize)
-    {
-        PageSize = pageSize;
-        PageIndex = pageIndex;
-    }
+    public int PageSize { get; init; }
 }

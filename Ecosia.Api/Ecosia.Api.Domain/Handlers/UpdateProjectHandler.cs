@@ -12,8 +12,8 @@ public class UpdateProjectHandler : BaseHandler<UpdateProjectCommand, Project>
 
     public override async Task<Project> Handle(UpdateProjectCommand command, CancellationToken cancellationToken)
     {
-        var project = await _unitOfWork.ProjectRepository.UpdateAsync(command.Project);
-        await _unitOfWork.SaveChangesAsync();
+        var project = await UnitOfWork.ProjectRepository.UpdateAsync(command.Project);
+        await UnitOfWork.SaveChangesAsync();
 
         return project;
     }
@@ -21,5 +21,5 @@ public class UpdateProjectHandler : BaseHandler<UpdateProjectCommand, Project>
 
 public class UpdateProjectCommand : IRequest<Project>
 {
-    public Project Project { get; set; }
+    public Project Project { get; init; }
 }

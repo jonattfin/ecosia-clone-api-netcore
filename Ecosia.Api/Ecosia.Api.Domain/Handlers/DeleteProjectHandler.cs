@@ -11,8 +11,8 @@ public class DeleteProjectHandler : BaseHandler<DeleteProjectCommand, bool>
     
     public override async Task<bool> Handle(DeleteProjectCommand command, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.ProjectRepository.DeleteAsync(command.ProjectId);
-        await _unitOfWork.SaveChangesAsync();
+        var result = await UnitOfWork.ProjectRepository.DeleteAsync(command.ProjectId);
+        await UnitOfWork.SaveChangesAsync();
         
         return result;
     }
@@ -21,5 +21,5 @@ public class DeleteProjectHandler : BaseHandler<DeleteProjectCommand, bool>
 
 public class DeleteProjectCommand : IRequest<bool>
 {
-    public Guid ProjectId { get; set; }
+    public Guid ProjectId { get; init; }
 }
