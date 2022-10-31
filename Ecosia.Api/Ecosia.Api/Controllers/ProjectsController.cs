@@ -29,7 +29,9 @@ public class ProjectsController : ControllerBase
         var response = new ProjectsResponse()
         {
             Projects = projects.Select(p => _mapper.Map<ProjectResponse>(p)),
-            NumberOfPages = numberOfPages
+            NumberOfPages = numberOfPages,
+            PageIndex = pageIndex,
+            PageSize = pageSize
         };
 
         return Ok(response);

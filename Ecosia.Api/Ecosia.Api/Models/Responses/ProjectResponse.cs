@@ -11,4 +11,8 @@ public class ProjectsResponse
     public IEnumerable<ProjectResponse> Projects { get; set; }
 
     public int NumberOfPages { get; set; }
+
+    public int PageIndex { get; set; }
+
+    public int PageSize { get; set; }
 }

@@ -1,5 +1,4 @@
 using Ecosia.Api.Models.Domain;
-using Ecosia.Api.Models.Requests;
 using Ecosia.Api.Repositories;
 using MediatR;
 
