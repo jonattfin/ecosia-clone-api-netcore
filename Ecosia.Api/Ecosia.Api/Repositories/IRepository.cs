@@ -4,17 +4,15 @@ namespace Ecosia.Api.Repositories;
 
 public interface IRepository<T>
 {
-    Task<IEnumerable<T>> GetAsync();
+    Task<IEnumerable<T>> GetAsync(int pageIndex, int pageSize);
 
     Task<T?> GetByIdAsync(Guid id);
 
     Task<bool> DeleteAsync(Guid id);
 
-    Task UpdateAsync(Guid id, Project project);
+    Task<T> UpdateAsync(T t);
 
-    Task<Project> AddAsync(Project project);
-
-    Task<bool> ExistsAsync(Guid id);
+    Task<T> AddAsync(T t);
 
     Task SaveChangesAsync();
 }

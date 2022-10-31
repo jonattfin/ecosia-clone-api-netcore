@@ -13,11 +13,16 @@ public class GetProjectHandler : IRequestHandler<GetProjectQuery, Project>
 
     public async Task<Project> Handle(GetProjectQuery query, CancellationToken cancellationToken)
     {
-        return await _unitOfWork.ProjectRepository.GetByIdAsync(query.Request.Id);
+        return await _unitOfWork.ProjectRepository.GetByIdAsync(query.Id);
     }
 }
 
 public class GetProjectQuery : IRequest<Project>
 {
-    public GetProjectRequest Request { get; init; }
+    public Guid Id { get; }
+
+    public GetProjectQuery(Guid id)
+    {
+        Id = id;
+    }
 }

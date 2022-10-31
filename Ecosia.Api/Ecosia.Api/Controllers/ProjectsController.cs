@@ -22,18 +22,16 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(int pageSize = 10, int pageIndex = 0)
+    public async Task<IActionResult> Get( int pageIndex = 0, int pageSize = 10)
     {
-        var request = new GetProjectsRequest(pageSize, pageIndex);
-        var projects = await _mediator.Send(new GetProjectsQuery() { Request = request });
+        var projects = await _mediator.Send(new GetProjectsQuery(pageIndex, pageSize));
         return Ok(_mapper.Map<IEnumerable<ProjectResponse>>(projects));
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var request = new GetProjectRequest(id);
-        var project = await _mediator.Send(new GetProjectQuery() { Request = request });
+        var project = await _mediator.Send(new GetProjectQuery(id));
         if (project is null)
         {
             return NotFound();
@@ -49,30 +47,29 @@ public class ProjectsController : ControllerBase
         {
             Project = _mapper.Map<Project>(request)
         });
+
         return CreatedAtAction(nameof(GetById), new { id = project.Id }, null);
     }
 
-    // [HttpPut("{id:guid}")]
-    // public async Task<IActionResult> Put(Guid id, UpdateProjectRequest request)
-    // {
-    //     var found = await _projectService.ExistsAsync(id);
-    //     if (!found)
-    //     {
-    //         return NotFound();
-    //     }
-    //
-    //     await _projectService.UpdateAsync(id, request);
-    //     return Ok();
-    // }
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Put(Guid id, UpdateProjectRequest request)
+    {
+        await _mediator.Send(new UpdateProjectCommand
+        {
+            Project = _mapper.Map<Project>(request)
+        });
+
+        return Ok();
+    }
 
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {
-        // var found = await _projectService.ExistsAsync(id);
-        // if (!found)
-        // {
-        //     return NotFound();
-        // }
+        var project = await _mediator.Send(new GetProjectQuery(id));
+        if (project is null)
+        {
+            return NotFound();
+        }
 
         await _mediator.Send(new DeleteProjectCommand() { Id = id });
         return Ok();

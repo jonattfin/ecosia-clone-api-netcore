@@ -13,9 +13,13 @@ public class EcosiaDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Project>().HasData(
-            new Project { Id = Guid.NewGuid(), Name = "Michelotti" },
-            new Project { Id = Guid.NewGuid(), Name = "Gates" },
-            new Project { Id = Guid.NewGuid(), Name = "Nadella" });
+        var projects = GenerateProjects();
+        modelBuilder.Entity<Project>().HasData(projects);
+    }
+
+    private static IEnumerable<Project> GenerateProjects()
+    {
+        return Enumerable.Range(1, 20)
+            .Select(element => new Project() { Id = Guid.NewGuid(), Name = $"Name {element}" });
     }
 }
