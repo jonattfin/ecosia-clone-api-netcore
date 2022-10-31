@@ -1,11 +1,9 @@
+namespace Ecosia.Api.Features.Projects.Models;
 
-namespace Ecosia.Api.Domain.Features.Projects.Models;
-
-public class Project
+public class UpdateProjectRequest
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
-
+    
     public string Scope { get; set; }
     
     public string Description { get; set; }
@@ -19,6 +17,4 @@ public class Project
     public int? YearSince { get; set; }
 
     public string ImageUrl { get; set; }
-
-    public List<Tag> Tags { get; set; }
 }

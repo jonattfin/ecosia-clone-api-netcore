@@ -1,4 +1,5 @@
 using Ecosia.Api.Extensions;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,9 +8,32 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(setupAction =>
+{
+    setupAction.AddSecurityDefinition("EcosiaApiBearerAuth", new OpenApiSecurityScheme()
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        Description = "Input a valid token to access this API"
+    });
 
-builder.Services.AddApplicationServices();
+    setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme()
+            {
+                Reference = new OpenApiReference()
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "EcosiaApiBearerAuth"
+                }
+            },
+            new List<string>()
+        }
+    });
+});
+
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -22,6 +46,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,4 +1,5 @@
 using Ecosia.Api.Domain.Features.Projects.Models;
+using Ecosia.Api.Domain.Features.Shared.Handlers;
 using Ecosia.Api.Domain.Repositories;
 using MediatR;
 
@@ -10,9 +11,9 @@ public class CreateProjectRequestHandler : BaseRequestHandler<CreateProjectComma
     {
     }
 
-    public override async Task<Project> Handle(CreateProjectCommand command, CancellationToken cancellationToken)
+    public override async Task<Project> Handle(CreateProjectCommand query, CancellationToken cancellationToken)
     {
-        var project = await UnitOfWork.ProjectRepository.AddAsync(command.Project);
+        var project = await UnitOfWork.ProjectRepository.AddAsync(query.Project);
         await UnitOfWork.SaveChangesAsync();
 
         return project;

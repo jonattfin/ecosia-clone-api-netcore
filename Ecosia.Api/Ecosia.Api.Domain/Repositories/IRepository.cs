@@ -2,7 +2,7 @@ namespace Ecosia.Api.Domain.Repositories;
 
 public interface IRepository<T>
 {
-    Task<(IEnumerable<T>, int)> GetAsync(int pageIndex, int pageSize);
+    Task<(IEnumerable<T>, int)> GetAsync(int pageNumber, int pageSize);
 
     Task<T?> GetByIdAsync(Guid id);
 

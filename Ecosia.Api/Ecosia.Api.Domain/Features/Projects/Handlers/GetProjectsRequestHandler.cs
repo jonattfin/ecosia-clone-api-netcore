@@ -1,4 +1,5 @@
 using Ecosia.Api.Domain.Features.Projects.Models;
+using Ecosia.Api.Domain.Features.Shared.Handlers;
 using Ecosia.Api.Domain.Repositories;
 using MediatR;
 
@@ -10,10 +11,10 @@ public class GetProjectsRequestHandler : BaseRequestHandler<GetProjectsQuery, (I
     {
     }
 
-    public override async Task<(IEnumerable<Project>, int)> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
+    public override async Task<(IEnumerable<Project>, int)> Handle(GetProjectsQuery query, CancellationToken cancellationToken)
     {
-        return await UnitOfWork.ProjectRepository.GetAsync(request.PageIndex, request.PageSize);
+        return await UnitOfWork.ProjectRepository.GetAsync(query.PageNumber, query.PageSize);
     }
 }
 
-public record GetProjectsQuery(int PageIndex, int PageSize) : IRequest<(IEnumerable<Project>, int)>;
+public record GetProjectsQuery(int PageNumber, int PageSize) : IRequest<(IEnumerable<Project>, int)>;

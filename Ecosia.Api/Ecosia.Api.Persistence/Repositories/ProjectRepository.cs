@@ -20,11 +20,11 @@ public class ProjectRepository : IRepository<Project>
         _context.Database.EnsureCreated();
     }
 
-    public async Task<(IEnumerable<Project>, int)> GetAsync(int pageIndex, int pageSize)
+    public async Task<(IEnumerable<Project>, int)> GetAsync(int pageNumber, int pageSize)
     {
         var projectsEntities = await _context.Projects.AsNoTracking()
             .OrderBy(p => p.Name)
-            .Skip(pageIndex * pageSize)
+            .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
@@ -64,7 +64,7 @@ public class ProjectRepository : IRepository<Project>
 
     public async Task<Project> AddAsync(Project project)
     {
-        var projectEntity = _mapper.Map<Entities.Project>(project);
+        var projectEntity = _mapper.Map<Entities.ProjectEntity>(project);
         var newProjectEntity = await _context.Projects.AddAsync(projectEntity);
         
         return _mapper.Map<Project>(newProjectEntity.Entity);

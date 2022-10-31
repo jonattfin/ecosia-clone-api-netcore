@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Ecosia.Api.Domain.Features.Projects.Handlers;
+namespace Ecosia.Api.Domain.Features.Shared.Handlers;
 
 public abstract class BaseNotificationHandler<T>: INotificationHandler<T> where T : INotification
 {

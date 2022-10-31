@@ -1,3 +1,4 @@
+using Ecosia.Api.Domain.Features.Shared.Handlers;
 using Ecosia.Api.Domain.Repositories;
 using MediatR;
 
@@ -9,9 +10,9 @@ public class DeleteProjectRequestHandler : BaseRequestHandler<DeleteProjectComma
     {
     }
     
-    public override async Task<bool> Handle(DeleteProjectCommand command, CancellationToken cancellationToken)
+    public override async Task<bool> Handle(DeleteProjectCommand query, CancellationToken cancellationToken)
     {
-        var result = await UnitOfWork.ProjectRepository.DeleteAsync(command.ProjectId);
+        var result = await UnitOfWork.ProjectRepository.DeleteAsync(query.ProjectId);
         await UnitOfWork.SaveChangesAsync();
         
         return result;

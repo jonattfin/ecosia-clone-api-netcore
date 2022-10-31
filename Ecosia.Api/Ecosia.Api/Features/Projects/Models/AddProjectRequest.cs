@@ -1,15 +1,20 @@
+using System.ComponentModel.DataAnnotations;
 
-namespace Ecosia.Api.Domain.Features.Projects.Models;
+namespace Ecosia.Api.Features.Projects.Models;
 
-public class Project
+public class AddProjectRequest
 {
-    public Guid Id { get; set; }
+    [Required] 
+    [MinLength(5)] 
     public string Name { get; set; }
-
+    
+    [Required] 
     public string Scope { get; set; }
     
+    [Required]
     public string Description { get; set; }
     
+    [Required]
     public string Title { get; set; }
     
     public int? TreesPlanted { get; set; }
@@ -17,8 +22,6 @@ public class Project
     public int? HectaresRestored { get; set; }
     
     public int? YearSince { get; set; }
-
+    
     public string ImageUrl { get; set; }
-
-    public List<Tag> Tags { get; set; }
 }

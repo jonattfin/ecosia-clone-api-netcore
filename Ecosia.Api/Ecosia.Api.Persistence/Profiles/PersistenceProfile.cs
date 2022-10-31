@@ -8,6 +8,7 @@ public class PersistenceProfile : Profile
 {
     public PersistenceProfile()
     {
-        CreateMap<Entities.Project, Project>().ReverseMap();
+        CreateMap<Entities.ProjectEntity, Project>().ReverseMap();
+        CreateMap<Entities.TagEntity, Tag>().ReverseMap();
     }
 }

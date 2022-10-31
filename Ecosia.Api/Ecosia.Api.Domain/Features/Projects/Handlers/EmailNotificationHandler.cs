@@ -1,4 +1,5 @@
 using Ecosia.Api.Domain.Features.Projects.Models;
+using Ecosia.Api.Domain.Features.Shared.Handlers;
 using MediatR;
 
 namespace Ecosia.Api.Domain.Features.Projects.Handlers;

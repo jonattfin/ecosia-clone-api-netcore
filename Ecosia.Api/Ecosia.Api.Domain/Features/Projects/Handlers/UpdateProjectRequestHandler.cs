@@ -1,4 +1,5 @@
 using Ecosia.Api.Domain.Features.Projects.Models;
+using Ecosia.Api.Domain.Features.Shared.Handlers;
 using Ecosia.Api.Domain.Repositories;
 using MediatR;
 
@@ -10,9 +11,9 @@ public class UpdateProjectRequestHandler : BaseRequestHandler<UpdateProjectComma
     {
     }
 
-    public override async Task<Project> Handle(UpdateProjectCommand command, CancellationToken cancellationToken)
+    public override async Task<Project> Handle(UpdateProjectCommand query, CancellationToken cancellationToken)
     {
-        var project = await UnitOfWork.ProjectRepository.UpdateAsync(command.Project);
+        var project = await UnitOfWork.ProjectRepository.UpdateAsync(query.Project);
         await UnitOfWork.SaveChangesAsync();
 
         return project;

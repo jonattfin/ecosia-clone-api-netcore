@@ -1,11 +1,14 @@
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ecosia.Api.Domain.Features.Projects.Models;
+namespace Ecosia.Api.Persistence.Entities;
 
-public class Project
+
+[Table("projects")]
+public class ProjectEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-
+    
     public string Scope { get; set; }
     
     public string Description { get; set; }
@@ -20,5 +23,5 @@ public class Project
 
     public string ImageUrl { get; set; }
 
-    public List<Tag> Tags { get; set; }
+    public List<TagEntity> Tags { get; set; }
 }

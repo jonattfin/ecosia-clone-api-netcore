@@ -3,12 +3,14 @@ using Ecosia.Api.Domain.Features.Projects.Handlers;
 using Ecosia.Api.Domain.Features.Projects.Models;
 using Ecosia.Api.Features.Projects.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecosia.Api.Features.Projects;
 
-[Route("api/projects")]
 [ApiController]
+[Authorize]
+[Route("api/projects")]
 public class ProjectsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,18 +23,16 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(int pageIndex = 0, int pageSize = 5)
+    public async Task<IActionResult> Get(int pageNumber = 1, int pageSize = 5)
     {
         var (projects, numberOfPages) =
-            await _mediator.Send(new GetProjectsQuery(pageIndex, pageSize));
+            await _mediator.Send(new GetProjectsQuery(pageNumber, pageSize));
 
-        var response = new ProjectsResponse()
-        {
-            Projects = projects.Select(p => _mapper.Map<ProjectResponse>(p)),
-            NumberOfPages = numberOfPages,
-            PageIndex = pageIndex,
-            PageSize = pageSize
-        };
+        var response = new ProjectsResponse(
+            projects.Select(p => _mapper.Map<ProjectResponse>(p)),
+            numberOfPages,
+            pageNumber,
+            pageSize);
 
         return Ok(response);
     }
@@ -80,3 +80,8 @@ public class ProjectsController : ControllerBase
         return Ok();
     }
 }
+
+
+
+
+
