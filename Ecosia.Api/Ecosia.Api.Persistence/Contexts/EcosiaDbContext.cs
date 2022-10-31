@@ -1,7 +1,7 @@
-using Ecosia.Api.Models.Domain;
+using Ecosia.Api.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ecosia.Api.Contexts;
+namespace Ecosia.Api.Persistence.Contexts;
 
 public class EcosiaDbContext : DbContext
 {

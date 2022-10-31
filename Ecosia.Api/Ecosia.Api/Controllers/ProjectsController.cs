@@ -1,6 +1,6 @@
 using AutoMapper;
-using Ecosia.Api.Handlers;
-using Ecosia.Api.Models.Domain;
+using Ecosia.Api.Domain.Handlers;
+using Ecosia.Api.Domain.Models;
 using Ecosia.Api.Models.Requests;
 using Ecosia.Api.Models.Responses;
 using MediatR;

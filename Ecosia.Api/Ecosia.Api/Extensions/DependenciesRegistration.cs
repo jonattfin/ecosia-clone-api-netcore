@@ -1,7 +1,7 @@
-using System.Reflection;
-using Ecosia.Api.Contexts;
-using Ecosia.Api.Models.Domain;
-using Ecosia.Api.Repositories;
+using Ecosia.Api.Domain.Models;
+using Ecosia.Api.Domain.Repositories;
+using Ecosia.Api.Persistence.Contexts;
+using Ecosia.Api.Persistence.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +11,10 @@ public static class DependenciesRegistration
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddMediatR(Assembly.GetExecutingAssembly());
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        
+        services.AddMediatR(assemblies);
+        services.AddAutoMapper(assemblies);
 
         services.AddDbContext<EcosiaDbContext>(options => options.UseInMemoryDatabase(databaseName: "EcosiaDbLocal"));
 

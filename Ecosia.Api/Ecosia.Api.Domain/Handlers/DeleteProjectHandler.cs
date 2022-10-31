@@ -1,7 +1,7 @@
-using Ecosia.Api.Repositories;
+using Ecosia.Api.Domain.Repositories;
 using MediatR;
 
-namespace Ecosia.Api.Handlers;
+namespace Ecosia.Api.Domain.Handlers;
 
 public class DeleteProjectHandler : BaseHandler<DeleteProjectCommand, bool>
 {

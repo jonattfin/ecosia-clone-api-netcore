@@ -1,6 +1,4 @@
-using Ecosia.Api.Models.Domain;
-
-namespace Ecosia.Api.Repositories;
+namespace Ecosia.Api.Domain.Repositories;
 
 public interface IRepository<T>
 {

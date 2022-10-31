@@ -1,5 +1,5 @@
 
-namespace Ecosia.Api.Models.Domain;
+namespace Ecosia.Api.Domain.Models;
 
 public class Project
 {

@@ -1,8 +1,9 @@
-using Ecosia.Api.Contexts;
-using Ecosia.Api.Models.Domain;
+using Ecosia.Api.Domain.Models;
+using Ecosia.Api.Domain.Repositories;
+using Ecosia.Api.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ecosia.Api.Repositories;
+namespace Ecosia.Api.Persistence.Repositories;
 
 public class ProjectRepository : IRepository<Project>
 {

@@ -13,4 +13,9 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Ecosia.Api.Domain\Ecosia.Api.Domain.csproj" />
+      <ProjectReference Include="..\Ecosia.Api.Persistence\Ecosia.Api.Persistence.csproj" />
+    </ItemGroup>
+
 </Project>

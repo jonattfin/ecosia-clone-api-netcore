@@ -1,6 +1,6 @@
-using Ecosia.Api.Models.Domain;
+using Ecosia.Api.Domain.Models;
 
-namespace Ecosia.Api.Repositories;
+namespace Ecosia.Api.Domain.Repositories;
 
 public interface IUnitOfWork
 {

@@ -1,5 +1,5 @@
 using AutoMapper;
-using Ecosia.Api.Models.Domain;
+using Ecosia.Api.Domain.Models;
 using Ecosia.Api.Models.Requests;
 using Ecosia.Api.Models.Responses;
 
