@@ -1,8 +1,8 @@
-using Ecosia.Api.Domain.Models;
+using Ecosia.Api.Domain.Features.Projects.Models;
 using Ecosia.Api.Domain.Repositories;
 using MediatR;
 
-namespace Ecosia.Api.Domain.Handlers;
+namespace Ecosia.Api.Domain.Features.Projects.Handlers;
 
 public class GetProjectHandler : BaseHandler<GetProjectQuery, Project>
 {

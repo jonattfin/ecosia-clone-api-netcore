@@ -1,4 +1,4 @@
-using Ecosia.Api.Domain.Models;
+using Ecosia.Api.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecosia.Api.Persistence.Contexts;

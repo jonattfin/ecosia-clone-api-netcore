@@ -1,4 +1,4 @@
-using Ecosia.Api.Domain.Models;
+using Ecosia.Api.Domain.Features.Projects.Models;
 
 namespace Ecosia.Api.Domain.Repositories;
 

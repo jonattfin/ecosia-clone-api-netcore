@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ecosia.Api.Models.Requests;
+namespace Ecosia.Api.Features.Projects.Models;
 
 public class AddProjectRequest
 {

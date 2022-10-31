@@ -1,4 +1,5 @@
-using Ecosia.Api.Domain.Models;
+using AutoMapper;
+using Ecosia.Api.Domain.Features.Projects.Models;
 using Ecosia.Api.Domain.Repositories;
 using Ecosia.Api.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,12 @@ namespace Ecosia.Api.Persistence.Repositories;
 public class ProjectRepository : IRepository<Project>
 {
     private readonly EcosiaDbContext _context;
+    private readonly IMapper _mapper;
 
-    public ProjectRepository(EcosiaDbContext context)
+    public ProjectRepository(EcosiaDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
 
         // TODO
         _context.Database.EnsureCreated();
@@ -19,7 +22,7 @@ public class ProjectRepository : IRepository<Project>
 
     public async Task<(IEnumerable<Project>, int)> GetAsync(int pageIndex, int pageSize)
     {
-        var projects = await _context.Projects.AsNoTracking()
+        var projectsEntities = await _context.Projects.AsNoTracking()
             .OrderBy(p => p.Name)
             .Skip(pageIndex * pageSize)
             .Take(pageSize)
@@ -27,22 +30,25 @@ public class ProjectRepository : IRepository<Project>
 
         var numberOfPages = await _context.Projects.AsNoTracking().CountAsync() / pageSize;
 
-        return (projects, numberOfPages);
+        return (_mapper.Map<IEnumerable<Project>>(projectsEntities), numberOfPages);
     }
 
 
-    public async Task<Project?> GetByIdAsync(Guid id) =>
-        await _context.Projects.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+    public async Task<Project?> GetByIdAsync(Guid id)
+    {
+        var projectEntity = await _context.Projects.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+        return _mapper.Map<Project>(projectEntity);
+    }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var project = await GetByIdAsync(id);
-        if (project is null)
+        var projectEntity = await _context.Projects.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+        if (projectEntity is null)
         {
             return await Task.FromResult(false);
         }
 
-        return await Task.FromResult(_context.Projects.Remove(project) != null);
+        return await Task.FromResult(_context.Projects.Remove(projectEntity) != null);
     }
 
     public async Task<Project> UpdateAsync(Project project)
@@ -58,8 +64,10 @@ public class ProjectRepository : IRepository<Project>
 
     public async Task<Project> AddAsync(Project project)
     {
-        var projectEntity = await _context.Projects.AddAsync(project);
-        return projectEntity.Entity;
+        var projectEntity = _mapper.Map<Entities.Project>(project);
+        var newProjectEntity = await _context.Projects.AddAsync(projectEntity);
+        
+        return _mapper.Map<Project>(newProjectEntity.Entity);
     }
 
     public async Task SaveChangesAsync()

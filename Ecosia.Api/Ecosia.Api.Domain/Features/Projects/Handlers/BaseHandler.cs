@@ -1,7 +1,7 @@
 using Ecosia.Api.Domain.Repositories;
 using MediatR;
 
-namespace Ecosia.Api.Domain.Handlers;
+namespace Ecosia.Api.Domain.Features.Projects.Handlers;
 
 public abstract class BaseHandler<TReq, TResp> : IRequestHandler<TReq, TResp> where TReq : IRequest<TResp>
 {

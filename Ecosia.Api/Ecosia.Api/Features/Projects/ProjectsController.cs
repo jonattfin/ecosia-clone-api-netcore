@@ -1,12 +1,11 @@
 using AutoMapper;
-using Ecosia.Api.Domain.Handlers;
-using Ecosia.Api.Domain.Models;
-using Ecosia.Api.Models.Requests;
-using Ecosia.Api.Models.Responses;
+using Ecosia.Api.Domain.Features.Projects.Handlers;
+using Ecosia.Api.Domain.Features.Projects.Models;
+using Ecosia.Api.Features.Projects.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ecosia.Api.Controllers;
+namespace Ecosia.Api.Features.Projects;
 
 [Route("api/projects")]
 [ApiController]

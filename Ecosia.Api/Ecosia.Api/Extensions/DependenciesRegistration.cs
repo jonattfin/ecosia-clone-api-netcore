@@ -1,4 +1,4 @@
-using Ecosia.Api.Domain.Models;
+using Ecosia.Api.Domain.Features.Projects.Models;
 using Ecosia.Api.Domain.Repositories;
 using Ecosia.Api.Persistence.Contexts;
 using Ecosia.Api.Persistence.Repositories;
