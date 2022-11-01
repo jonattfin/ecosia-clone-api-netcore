@@ -13,5 +13,5 @@ public class TagEntity
     
     public ProjectEntity Project { get; set; }
     
-    public Guid ProjectEntityId { get; set; }
+    public Guid ProjectId { get; set; }
 }

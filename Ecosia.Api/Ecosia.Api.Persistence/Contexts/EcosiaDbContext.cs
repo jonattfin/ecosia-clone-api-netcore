@@ -15,17 +15,31 @@ public class EcosiaDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var projects = GenerateProjects();
+        var tags = GenerateTags(projects);
+        
         modelBuilder.Entity<ProjectEntity>().HasData(projects);
+        modelBuilder.Entity<TagEntity>().HasData(tags);
+    }
+
+    private static IEnumerable<TagEntity> GenerateTags(IEnumerable<ProjectEntity> projectEntities)
+    {
+        return projectEntities.Select(projectEntity => new TagEntity()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Tag Title 1",
+            Subtitle = "Tag Subtitle 1",
+            ProjectId = projectEntity.Id
+        }).ToImmutableList();
     }
 
     private static IEnumerable<ProjectEntity> GenerateProjects()
     {
         var random = new Random();
-        
+
         return Enumerable.Range(1, 20)
             .Select(element => new ProjectEntity()
             {
-                Id = Guid.NewGuid(), 
+                Id = Guid.NewGuid(),
                 Name = $"Name {element}",
                 Description = $"Description {element}",
                 Scope = $"Scope {element}",
@@ -34,21 +48,6 @@ public class EcosiaDbContext : DbContext
                 HectaresRestored = random.Next(100),
                 TreesPlanted = random.Next(1000),
                 YearSince = random.Next(2010, 2022),
-                Tags = new List<TagEntity>()
-                {
-                    new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Title = "Tag Title 1",
-                        Subtitle = "Tag Subtitle 1",
-                    },
-                    new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Title = "Tag Title 2",
-                        Subtitle = "Tag Subtitle 2",
-                    }
-                }
             }).ToImmutableList();
     }
 }

@@ -23,6 +23,7 @@ public class ProjectRepository : IRepository<Project>
     public async Task<(IEnumerable<Project>, int)> GetAsync(int pageNumber, int pageSize)
     {
         var projectsEntities = await _context.Projects.AsNoTracking()
+            .Include(p => p.Tags)
             .OrderBy(p => p.Name)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -36,7 +37,10 @@ public class ProjectRepository : IRepository<Project>
 
     public async Task<Project?> GetByIdAsync(Guid id)
     {
-        var projectEntity = await _context.Projects.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+        var projectEntity =
+            await _context.Projects.AsNoTracking().Include(p => p.Tags)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        
         return _mapper.Map<Project>(projectEntity);
     }
 
@@ -53,10 +57,15 @@ public class ProjectRepository : IRepository<Project>
 
     public async Task<Project> UpdateAsync(Project project)
     {
-        var existingProject = await _context.Projects.FirstOrDefaultAsync(p => p.Id == p.Id);
-        if (existingProject is not null)
+        var entity = await _context.Projects.FirstOrDefaultAsync(p => p.Id == p.Id);
+        if (entity is not null)
         {
-            existingProject.Name = project.Name;
+            entity.Name = project.Name;
+            entity.Description = project.Description;
+            entity.Scope = project.Scope;
+            entity.Title = project.Title;
+            entity.ImageUrl = project.ImageUrl;
+            // etc
         }
 
         return project;
@@ -66,7 +75,7 @@ public class ProjectRepository : IRepository<Project>
     {
         var projectEntity = _mapper.Map<Entities.ProjectEntity>(project);
         var newProjectEntity = await _context.Projects.AddAsync(projectEntity);
-        
+
         return _mapper.Map<Project>(newProjectEntity.Entity);
     }
 

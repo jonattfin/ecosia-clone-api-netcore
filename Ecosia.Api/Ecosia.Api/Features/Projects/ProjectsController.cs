@@ -4,12 +4,14 @@ using Ecosia.Api.Domain.Features.Projects.Models;
 using Ecosia.Api.Features.Projects.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecosia.Api.Features.Projects;
 
 [ApiController]
-[Authorize]
+// [Authorize]
 [Route("api/projects")]
 public class ProjectsController : ControllerBase
 {
@@ -23,6 +25,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(int pageNumber = 1, int pageSize = 5)
     {
         var (projects, numberOfPages) =
@@ -38,6 +41,8 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(Guid id)
     {
         var project = await _mediator.Send(new GetProjectQuery(id));
@@ -50,6 +55,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Post(AddProjectRequest request)
     {
         var project = await _mediator.Send(new CreateProjectCommand(_mapper.Map<Project>(request)));
@@ -60,14 +66,29 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, UpdateProjectRequest request)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Put(Guid id, JsonPatchDocument<UpdateProjectRequest> request)
     {
-        await _mediator.Send(new UpdateProjectCommand(_mapper.Map<Project>(request)));
+        var project = await _mediator.Send(new GetProjectQuery(id));
+        if (project is null)
+        {
+            return NotFound();
+        }
+
+        var updateProjectRequest = _mapper.Map<UpdateProjectRequest>(project);
+        request.ApplyTo(updateProjectRequest);
+
+        var updatedProject = _mapper.Map<Project>(updateProjectRequest);
+        
+        await _mediator.Send(new UpdateProjectCommand(updatedProject));
 
         return Ok();
     }
 
     [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var project = await _mediator.Send(new GetProjectQuery(id));

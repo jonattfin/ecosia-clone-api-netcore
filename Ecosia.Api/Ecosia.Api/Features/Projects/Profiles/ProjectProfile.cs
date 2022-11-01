@@ -9,7 +9,7 @@ public class ProjectProfile : Profile
     public ProjectProfile()
     {
         CreateMap<AddProjectRequest, Project>();
-        CreateMap<UpdateProjectRequest, Project>();
+        CreateMap<UpdateProjectRequest, Project>().ReverseMap();
         CreateMap<Project, ProjectResponse>();
     }
 }
